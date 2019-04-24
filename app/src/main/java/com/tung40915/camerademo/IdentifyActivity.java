@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class IdentifyActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,9 +61,21 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
         database = Database.initDatabase(this,DatabaseName);
 
         result = new ArrayList<DogBreedResult>();
-        result.add(new DogBreedResult(1,new RectF(200,300,400,700)));
-        result.add(new DogBreedResult(2,new RectF(700,300,500,700)));
-        result.add(new DogBreedResult(3,new RectF(200,1000,500,1200)));
+        int a1,a2,a3,a4,a5;
+        Random rand = new Random();
+
+        for(int i=0;i<3;i++)
+        {
+            a1 = rand.nextInt(3) + 1;
+            a2 = rand.nextInt(500) + 300;
+            a3 = rand.nextInt(500) + 800;
+            a4 = rand.nextInt(1000) + 100;
+            a5 = rand.nextInt(1000) + 1100;
+
+            result.add(new DogBreedResult(a1,new RectF(a2,a3,a4,a5)));
+
+
+        }
 
         int number = getIntent().getExtras().getInt("MY_KEY");
         if(number == 1)
