@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "58224609888",
+    "firebase_url": "https://dogbreedthp.firebaseio.com",
+    "project_id": "dogbreedthp",
+    "storage_bucket": "dogbreedthp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58224609888:android:e83d7912355bc187",
+        "android_client_info": {
+          "package_name": "com.tung40915.camerademo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58224609888-pi53m0cj4c68mnoakcde10i59oj8inks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4uF-a7BM-xmdt9_mNQXm11FleNelqOnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58224609888-pi53m0cj4c68mnoakcde10i59oj8inks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,11 +1,13 @@
 package com.tung40915.camerademo;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -16,20 +18,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+public class IdentifyActivity extends AppCompatActivity implements View.OnClickListener {
 
-public class IdentifyActivity extends AppCompatActivity {
+    final String DatabaseName = "DogBreedDatabase.sqlite";
+    SQLiteDatabase database;
 
     Toolbar toolbar;
     ImageView imageView;
 
     int REQUEST_CODE_CAMERA = 1;
     int PICK_IMAGE = 2;
+
+    RelativeLayout rl;
+    Button bt;
+    RelativeLayout.LayoutParams params;
+
+    List<DogBreedResult> result;
+
+    Dialog informationDialog;
+    TextView info_name;
+    TextView info_avgWeight;
+    TextView info_avgHeight;
+    TextView info_description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +56,13 @@ public class IdentifyActivity extends AppCompatActivity {
 
         AnhXa();
         ActionBar();
+
+        database = Database.initDatabase(this,DatabaseName);
+
+        result = new ArrayList<DogBreedResult>();
+        result.add(new DogBreedResult(1,new RectF(200,300,400,700)));
+        result.add(new DogBreedResult(2,new RectF(700,300,500,700)));
+        result.add(new DogBreedResult(3,new RectF(200,1000,500,1200)));
 
         int number = getIntent().getExtras().getInt("MY_KEY");
         if(number == 1)
@@ -58,6 +83,38 @@ public class IdentifyActivity extends AppCompatActivity {
                 openGallery();
         }
 
+
+        for (DogBreedResult a: result)
+        {
+            RectF exam = a.getLocation();
+            bt= new Button(this);
+            bt.setBackground(getResources().getDrawable(R.drawable.button_border));
+            float w = exam.right-exam.left;
+            float h = exam.bottom - exam.top;
+            params = new RelativeLayout.LayoutParams((int)w,(int)h);
+            params.leftMargin = (int) exam.left;
+            params.topMargin = (int) exam.left;
+
+            bt.setTag(a);
+            rl.addView(bt, params);
+            bt.setOnClickListener(IdentifyActivity.this);
+        }
+    }
+    @Override
+    public void onClick(View v)
+    {
+        DogBreedResult result = (DogBreedResult) v.getTag();
+
+        String query = "SELECT * FROM DogBreed WHERE ID = "+result.getID() + ";";
+        Cursor cursor = database.rawQuery(query,null);
+
+        cursor.moveToFirst();
+
+        info_name.setText("Name: \t"+cursor.getString(1));
+        info_avgWeight.setText("Weight: \t"+cursor.getString(2));
+        info_avgHeight.setText("Height: \t"+cursor.getString(3));
+        info_description.setText("More Detail: \t"+cursor.getString(4));
+        informationDialog.show();
     }
 
     @Override
@@ -122,5 +179,18 @@ public class IdentifyActivity extends AppCompatActivity {
     private void AnhXa(){
         toolbar = (Toolbar) findViewById(R.id.toolBar_IDENTIFYACTIVITY);
         imageView = (ImageView) findViewById(R.id.imageview_IDENTIFYACTIVITY);
+        rl = (RelativeLayout) findViewById(R.id.mylayout);
+
+        informationDialog = new Dialog(this);
+        informationDialog.setContentView(R.layout.pop_up);
+        informationDialog.setCanceledOnTouchOutside(true);
+
+        info_name = (TextView) informationDialog.findViewById(R.id.PopUpName);
+        info_avgWeight  = (TextView) informationDialog.findViewById(R.id.PopUpAvgWeight);
+        info_avgHeight  = (TextView) informationDialog.findViewById(R.id.PopUpAvgHeight);
+        info_description  = (TextView) informationDialog.findViewById(R.id.PopUpDiscription);
+
+
+
     }
 }

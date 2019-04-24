@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height = "wrap_content"
+    android:background="@drawable/popup_border"
+    android:padding="5dp"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:weightSum="10">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:textColor="@android:color/holo_orange_dark"
+        android:text="INFORMATION"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:id="@+id/PopUpInformation"
+
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="Name: "
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:id="@+id/PopUpName"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="Average Weight: "
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:id="@+id/PopUpAvgWeight"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="Average Height: "
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:id="@+id/PopUpAvgHeight"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:text="Description: "
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:id="@+id/PopUpDiscription"
+        />
+
+
+</LinearLayout>
