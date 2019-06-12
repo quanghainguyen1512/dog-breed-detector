@@ -1,68 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="7"
-    tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.tung40915.camerademo.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBar_IDENTIFYACTIVITY"
-        android:background="#ce4656"
-        android:layout_gravity="center_horizontal"
+    <com.wonderkiln.camerakit.CameraView
+        android:id="@+id/cameraView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center|top" />
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
-
-
-    <ViewFlipper
-        android:id="@+id/viewflipper"
-        android:layout_weight="3"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:autoStart="true"
-        android:flipInterval="3000" >
+        android:layout_height="80dp"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="300dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/cho1" />
+            android:id="@+id/imageViewResult"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:padding="2dp" />
 
-        <ImageView
+        <TextView
+            android:id="@+id/textViewResult"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/cho2" />
+            android:layout_height="80dp"
+            android:fadeScrollbars="false"
+            android:gravity="center"
+            android:maxLines="15"
+            android:scrollbars="vertical"
+            android:textColor="@android:color/black" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/cho3" />
-
-    </ViewFlipper>
+    </LinearLayout>
 
 
     <Button
-        android:id="@+id/btn_TAKEPICTURE"
-        android:layout_marginTop="50dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="300dp"
-        android:layout_height="0dp"
-        android:textColor="#961212"
-        android:textSize="10pt"
-        android:text="Take A Picture" />
+        android:id="@+id/btnToggleCamera"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="50dp"
+        android:text="Toggle Camera"
+        android:textAllCaps="false"
+        android:textColor="@android:color/black" />
 
     <Button
-        android:id="@+id/btn_CHOOSEPICTURE"
-        android:textColor="#961212"
-        android:layout_gravity="center_horizontal"
-        android:textSize="10pt"
-        android:layout_marginTop="50dp"
-        android:layout_width="300dp"
-        android:layout_weight="1"
+        android:id="@+id/btnDetectObject"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom|center"
+        android:text="Detect"
+        android:textAllCaps="false"
+        android:textColor="@android:color/black"
+        android:visibility="gone" />
 
-        android:layout_height="0dp"
-        android:text="Choose From Gallery" />
-
-</LinearLayout>
+</FrameLayout>
