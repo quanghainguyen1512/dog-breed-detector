@@ -1,7 +1,9 @@
 package com.tung40915.camerademo;
 
+
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -37,6 +39,8 @@ import java.util.Random;
 
 public class IdentifyActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+
     final String DatabaseName = "DogBreedDatabase.sqlite";
     SQLiteDatabase database;
 
@@ -63,6 +67,7 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_identify);
+
 
         AnhXa();
         ActionBar();
@@ -129,6 +134,9 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
         informationDialog.show();
     }
 
+
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode,  String[] permissions,   int[] grantResults) {
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
@@ -172,7 +180,7 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null) {
+        if(requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK ) {
 
 //            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 //            imageView.setImageBitmap(bitmap);
@@ -181,7 +189,7 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
             try {
                 File file = new File(currentPhotoPath);
                 Bitmap bitmap = MediaStore.Images.Media
-                        .getBitmap(getContentResolver(), Uri.fromFile(file));
+                        .getBitmap(IdentifyActivity.this.getContentResolver(), Uri.fromFile(file));
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);
                 }
@@ -218,7 +226,7 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
+                Uri photoURI = FileProvider.getUriForFile(IdentifyActivity.this,
                         "com.tung40915.camerademo.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
