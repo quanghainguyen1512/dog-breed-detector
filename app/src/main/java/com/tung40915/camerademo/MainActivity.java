@@ -108,9 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 {
                     String display = "Breed: "+ results.get(0).getTitle() + "\n" + "Confidence: "+results.get(0).getConfidence();
                     textViewResult.setText(display);
-                   btnMore.setVisibility(View.VISIBLE);
+                    btnMore.setVisibility(View.VISIBLE);
                     id = results.get(0).getId();
-
                 }
                 else
                     {
