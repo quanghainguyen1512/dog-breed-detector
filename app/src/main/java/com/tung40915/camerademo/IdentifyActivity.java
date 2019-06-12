@@ -35,8 +35,8 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
     Toolbar toolbar;
     ImageView imageView;
 
-    int REQUEST_CODE_CAMERA = 1;
-    int PICK_IMAGE = 2;
+    private static final int REQUEST_CODE_CAMERA = 2500;
+    private static final int PICK_IMAGE = 1002;
 
     RelativeLayout rl;
     Button bt;
@@ -80,22 +80,12 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
         int number = getIntent().getExtras().getInt("MY_KEY");
         if(number == 1)
         {
-            if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(IdentifyActivity.this, new String[] {Manifest.permission.CAMERA},REQUEST_CODE_CAMERA);
-            }
-            else
-                openCamera();
-
+           openCamera();
         }
         else
         {
-            if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(IdentifyActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},PICK_IMAGE);
-            }
-            else
-                openGallery();
+            openGallery();
         }
-
 
         for (DogBreedResult a: result)
         {
@@ -131,26 +121,51 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == REQUEST_CODE_CAMERA && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_GRANTED) {
-            openCamera();
-        }
-        else if (requestCode == REQUEST_CODE_CAMERA && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_DENIED)
+    public void onRequestPermissionsResult(int requestCode,  String[] permissions,   int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        switch (requestCode)
         {
-            Toast.makeText(this,"Bạn cần cho phép ứng dụng truy cập máy ảnh để dùng chức năng này",Toast.LENGTH_LONG).show();
+            case REQUEST_CODE_CAMERA:
+            {
+                if(grantResults.length > 1
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+                {
+                    openCamera();
+                }
+                else{
+                    Toast.makeText(this,"Bạn cần cho phép ứng dụng truy cập máy ảnh để dùng chức năng này",Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
         }
-        else if(requestCode == PICK_IMAGE && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_GRANTED) {
-            openGallery();
-        }
-        else if (requestCode == PICK_IMAGE && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_DENIED)
-        {
-            Toast.makeText(this,"Bạn cần cho phép ứng dụng truy cập bộ sưu tập để dùng chức năng này",Toast.LENGTH_LONG).show();
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //Toast.makeText(this,"I got there",Toast.LENGTH_LONG).show();
+//        if(requestCode == REQUEST_CODE_CAMERA && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_GRANTED) {
+//            openCamera();
+//        }
+//        else if (requestCode == REQUEST_CODE_CAMERA && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_DENIED)
+//        {
+//            Toast.makeText(this,"Bạn cần cho phép ứng dụng truy cập máy ảnh để dùng chức năng này",Toast.LENGTH_LONG).show();
+//        }
+//        else if(requestCode == PICK_IMAGE && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_GRANTED) {
+//            openGallery();
+//        }
+//        else if (requestCode == PICK_IMAGE && grantResults.length > 0 && grantResults[0]== PackageManager.PERMISSION_DENIED)
+//        {
+//            Toast.makeText(this,"Bạn cần cho phép ứng dụng truy cập bộ sưu tập để dùng chức năng này",Toast.LENGTH_LONG).show();
+//        }
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+
+
 
         if(requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null) {
 
@@ -158,19 +173,20 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
             imageView.setImageBitmap(bitmap);
         }
 
-        else if(resultCode == RESULT_OK && requestCode == PICK_IMAGE && data!= null)
+        else
+            if(resultCode == RESULT_OK && requestCode == PICK_IMAGE && data!= null)
         {
            Uri imageUri = data.getData();
            imageView.setImageURI(imageUri);
         }
-        else if(resultCode == RESULT_CANCELED && requestCode == PICK_IMAGE)
+        else if(resultCode == RESULT_CANCELED)
             finish();
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CODE_CAMERA);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
     }
 
     private void openGallery(){
