@@ -7,13 +7,16 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +26,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -37,6 +45,7 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
 
     private static final int REQUEST_CODE_CAMERA = 2500;
     private static final int PICK_IMAGE = 1002;
+    String currentPhotoPath;
 
     RelativeLayout rl;
     Button bt;
@@ -163,14 +172,23 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-
-
-
         if(requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null) {
 
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(bitmap);
+//            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+//            imageView.setImageBitmap(bitmap);
+
+
+            try {
+                File file = new File(currentPhotoPath);
+                Bitmap bitmap = MediaStore.Images.Media
+                        .getBitmap(getContentResolver(), Uri.fromFile(file));
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         else
@@ -185,8 +203,28 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void openCamera() {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
+//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                finish();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.tung40915.camerademo.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA);
+            }
+        }
     }
 
     private void openGallery(){
@@ -219,7 +257,21 @@ public class IdentifyActivity extends AppCompatActivity implements View.OnClickL
         info_avgHeight  = (TextView) informationDialog.findViewById(R.id.PopUpAvgHeight);
         info_description  = (TextView) informationDialog.findViewById(R.id.PopUpDiscription);
 
+    }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
 
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
