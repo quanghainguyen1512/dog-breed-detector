@@ -1,5 +1,8 @@
 package com.tung40915.camerademo;
 
+import android.app.Dialog;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hai.classifier.Classifier;
 import com.hai.classifier.DogClassifier;
@@ -24,6 +28,10 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
+    final String DatabaseName = "DogBreedDatabase.sqlite";
+
+    SQLiteDatabase database;
+
     private static final String MODEL_PATH = "mod.tflite";
     private static final boolean QUANT = false;
     private static final String LABEL_PATH = "dog_labels.txt";
@@ -33,9 +41,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private TextView textViewResult;
-    private Button btnDetectObject, btnToggleCamera;
+    private Button btnDetectObject, btnToggleCamera,btnMore;
     private ImageView imageViewResult;
     private CameraView cameraView;
+
+    private String id;
+
+    Dialog informationDialog;
+    TextView info_name;
+    TextView info_avgWeight;
+    TextView info_avgHeight;
+    TextView info_description;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +65,22 @@ public class MainActivity extends AppCompatActivity {
 
         btnToggleCamera = findViewById(R.id.btnToggleCamera);
         btnDetectObject = findViewById(R.id.btnDetectObject);
+        btnMore = findViewById(R.id.btnMoreInfo);
+
+        btnMore.setVisibility(View.INVISIBLE);
+
+        informationDialog = new Dialog(this);
+        informationDialog.setContentView(R.layout.pop_up);
+        informationDialog.setCanceledOnTouchOutside(true);
+
+        info_name = (TextView) informationDialog.findViewById(R.id.PopUpName);
+        info_avgWeight  = (TextView) informationDialog.findViewById(R.id.PopUpAvgWeight);
+        info_avgHeight  = (TextView) informationDialog.findViewById(R.id.PopUpAvgHeight);
+        info_description  = (TextView) informationDialog.findViewById(R.id.PopUpDiscription);
+
+        database = Database.initDatabase(this,DatabaseName);
+
+
 
         cameraView.addCameraKitListener(new CameraKitEventListener() {
             @Override
@@ -71,7 +104,22 @@ public class MainActivity extends AppCompatActivity {
 
                 final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
 
-                textViewResult.setText(results.toString());
+                if(results.size() != 0)
+                {
+                    String display = "Breed: "+ results.get(0).getTitle() + "\n" + "Confidence: "+results.get(0).getConfidence();
+                    textViewResult.setText(display);
+                   btnMore.setVisibility(View.VISIBLE);
+                    id = results.get(0).getId();
+
+                }
+                else
+                    {
+                        textViewResult.setText("");
+                        btnMore.setVisibility(View.INVISIBLE);
+                        id = "";
+                    }
+
+
 
             }
 
@@ -92,6 +140,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cameraView.captureImage();
+            }
+        });
+
+        btnMore.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(id != "")
+                {
+                    String query = "SELECT * FROM DogBreed WHERE ID = "+id + ";";
+                    Cursor cursor = database.rawQuery(query,null);
+
+                    cursor.moveToFirst();
+
+
+                    if(cursor!=null)
+                    {
+                        info_name.setText("Name: \t"+cursor.getString(1));
+                        info_avgWeight.setText("Weight: \t"+cursor.getString(2));
+                        info_avgHeight.setText("Height: \t"+cursor.getString(3));
+                        info_description.setText("More Detail: \t"+cursor.getString(4));
+                        informationDialog.show();
+                    }
+                }
             }
         });
 
