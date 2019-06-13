@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InformationActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar_IDENTIFYACTIVITY"
+        android:background="#ce4656"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="55dp"
+        android:orientation="vertical"
+        android:weightSum="10"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:weightSum="10"
+
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_weight="3"
+                android:layout_marginLeft="10dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="Breed: "/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:textSize="13sp"
+                android:id="@+id/tvBreed"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:weightSum="10"
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_weight="3"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Average Height: "/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:textSize="13sp"
+                android:id="@+id/tvHeight"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:weightSum="10"
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_weight="3"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_width="0dp"
+
+                android:layout_height="match_parent"
+                android:text="Average Wieight: "/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:textSize="13sp"
+                android:id="@+id/tvWeight"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="7"
+            android:weightSum="10"
+            android:layout_height="0dp">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="More Detail: "/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_weight="7"
+                android:scrollbars="vertical"
+                android:textSize="13sp"
+                android:id="@+id/tvDetail"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
