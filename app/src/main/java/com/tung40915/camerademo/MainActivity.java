@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    final String DatabaseName = "DogBreedDatabase.sqlite";
+    final String DatabaseName = "DogBreed.sqlite";
 
     SQLiteDatabase database;
 
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         info_description  = (TextView) informationDialog.findViewById(R.id.PopUpDiscription);
 
         database = Database.initDatabase(this,DatabaseName);
+
 
 
 
@@ -150,11 +151,10 @@ public class MainActivity extends AppCompatActivity {
                     String query = "SELECT * FROM DogBreed WHERE ID = "+id + ";";
                     Cursor cursor = database.rawQuery(query,null);
 
-                    cursor.moveToFirst();
-
 
                     if(cursor!=null)
                     {
+                        cursor.moveToFirst();
                         info_name.setText("Name: \t"+cursor.getString(1));
                         info_avgWeight.setText("Weight: \t"+cursor.getString(2));
                         info_avgHeight.setText("Height: \t"+cursor.getString(3));
